@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\AuditLog;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Schema;
 
 class AuditLogger
 {
@@ -14,6 +15,10 @@ class AuditLogger
      */
     public function log(string $action, ?Model $model = null, ?array $oldValues = null, ?array $newValues = null): void
     {
+        if (! Schema::hasTable('audit_logs')) {
+            return;
+        }
+
         AuditLog::query()->create([
             'user_id' => auth()->id(),
             'action' => $action,

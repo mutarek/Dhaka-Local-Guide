@@ -30,7 +30,7 @@ class PostController extends Controller
         $post->load(['category', 'tags']);
 
         if ($countView) {
-            $post->increment('views_count');
+            Post::withoutEvents(fn () => $post->increment('views_count'));
         }
 
         $relatedPosts = Post::query()
